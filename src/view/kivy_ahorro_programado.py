@@ -103,7 +103,8 @@ class SavingsCalculator(RoundedBoxLayout):
             if interest < MinimunValue or interest > MaximunValue:
                 raise app.Invalidinterest("La tasa de interés debe estar entre 0 y 100.")
 
-            result = app.Calculate_programmed_savings(amount, interest, months)
+            saving = app.Saving(amount, interest, months)
+            result = saving.calculate_programmed_savings()
             self.result_label.text = f"Ahorro Total: {result:.2f}"
         except (ValueError, app.Invalidinterest, app.Invalidmonths) as e:
             self.show_error_popup(str(e))
