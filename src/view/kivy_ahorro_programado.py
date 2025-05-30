@@ -11,6 +11,7 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
+from src.controller import saving_controller
 from src.model import app
 
 class RoundedBoxLayout(BoxLayout):
@@ -50,6 +51,49 @@ class SavingsCalculator(RoundedBoxLayout):
         interest_layout.add_widget(interest_label)
         interest_layout.add_widget(self.interest_input)
         self.add_widget(interest_layout)
+
+        # Campo para el ID (para actualizar/eliminar/consultar)
+        id_layout = BoxLayout(orientation='horizontal', spacing=10, padding=10)
+        id_label = Label(text="ID (opcional):", color=(0.5, 0.5, 0.5, 1))
+        self.id_input = TextInput(hint_text="ID para modificar/eliminar/consultar", multiline=False, background_color=(1, 1, 1, 1), foreground_color=(0, 0, 0, 1), padding=[10, 10])
+        id_layout.add_widget(id_label)
+        id_layout.add_widget(self.id_input)
+        self.add_widget(id_layout)
+ 
+        # Botón para crear la tabla
+        self.create_table_button = Button(text="Crear Tabla", background_color=(0.2, 0.6, 0.2, 1), color=(1, 1, 1, 1), size_hint=(1, None), height=40)
+        self.create_table_button.bind(on_press=self.create_table)
+        self.add_widget(self.create_table_button)
+ 
+        # Botón para guardar
+        self.save_button = Button(text="Guardar", background_color=(0.27, 0.24, 0.56, 1), color=(1, 1, 1, 1), size_hint=(1, None), height=40)
+        self.save_button.bind(on_press=self.save_saving)
+        self.add_widget(self.save_button)
+ 
+        # Botón para consultar
+        self.consult_button = Button(text="Consultar", background_color=(0.24, 0.56, 0.56, 1), color=(1, 1, 1, 1), size_hint=(1, None), height=40)
+        self.consult_button.bind(on_press=self.consult_saving)
+        self.add_widget(self.consult_button)
+ 
+        # Botón para actualizar
+        self.update_button = Button(text="Actualizar", background_color=(0.56, 0.44, 0.24, 1), color=(1, 1, 1, 1), size_hint=(1, None), height=40)
+        self.update_button.bind(on_press=self.update_saving)
+        self.add_widget(self.update_button)
+ 
+        # Botón para eliminar
+        self.delete_button = Button(text="Eliminar Registro", background_color=(0.8, 0.2, 0.2, 1), color=(1, 1, 1, 1), size_hint=(1, None), height=40)
+        self.delete_button.bind(on_press=self.delete_saving)
+        self.add_widget(self.delete_button)
+ 
+        self.drop_table_button = Button(
+            text="Eliminar Tabla",
+            background_color=(0.8, 0.2, 0.2, 1),
+            color=(1, 1, 1, 1),
+            size_hint=(1, None),
+            height=40
+        )
+        self.drop_table_button.bind(on_press=self.drop_table)
+        self.add_widget(self.drop_table_button)
 
         self.calculate_button = Button(
             text="Calcular Ahorro",
@@ -109,6 +153,68 @@ class SavingsCalculator(RoundedBoxLayout):
         except (ValueError, app.Invalidinterest, app.Invalidmonths) as e:
             self.show_error_popup(str(e))
 
+    def create_table(self, instance):
+        try:
+            saving_controller.create_savings_table()
+            self.result_label.text = "Tabla creada correctamente."
+        except Exception as e:
+            self.show_error_popup(str(e))
+ 
+    def save_saving(self, instance):
+        try:
+            amount = float(self.amount_input.text)
+            months = int(self.months_input.text)
+            interest = float(self.interest_input.text)
+            saving = app.Saving(amount, interest, months)
+            saving_controller.insert_saving(saving)
+            self.result_label.text = "Ahorro guardado correctamente."
+        except Exception as e:
+            self.show_error_popup(str(e))
+ 
+    def consult_saving(self, instance):
+        try:
+            id_saving = int(self.id_input.text)
+            result = saving_controller.select_savings(id_saving)
+            if result and len(result) > 0:
+                row = result[0]
+                self.result_label.text = (
+                    f"Consulta exitosa:\n"
+                    f"ID: {row[0]}\n"
+                    f"Cantidad mensual: {row[1]}\n"
+                    f"Tasa de interés: {row[2]}\n"
+                    f"Meses: {row[3]}"
+                )
+            else:
+                self.result_label.text = f"No se encontró un ahorro con ID {id_saving}."
+        except Exception as e:
+            self.show_error_popup(str(e))
+ 
+    def update_saving(self, instance):
+        try:
+            id_saving = int(self.id_input.text)
+            amount = float(self.amount_input.text)
+            months = int(self.months_input.text)
+            interest = float(self.interest_input.text)
+            saving = app.Saving(amount, interest, months)
+            saving_controller.update_saving(id_saving, saving)
+            self.result_label.text = f"Ahorro actualizado para ID {id_saving}."
+        except Exception as e:
+            self.show_error_popup(str(e))
+ 
+    def delete_saving(self, instance):
+        try:
+            id_saving = int(self.id_input.text)
+            saving_controller.delete_saving(id_saving)
+            self.result_label.text = f"Ahorro eliminado para ID {id_saving}."
+        except Exception as e:
+            self.show_error_popup(str(e))
+ 
+    def drop_table(self, instance):
+        try:
+            saving_controller.drop_savings_table()
+            self.result_label.text = "Tabla eliminada correctamente."
+        except Exception as e:
+            self.show_error_popup(str(e))
 
 class SavingsApp(App):
     def build(self):

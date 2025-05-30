@@ -91,8 +91,22 @@ def select_savings(id_saving: int):
         rows = cursor.fetchall()
         for row in rows:
             print(row)
+        return rows
     except Exception as e:
         print(f"Error seleccionando todos los ahorros: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def drop_savings_table():
+    conn = connect_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute('DROP TABLE IF EXISTS "public"."savings";')
+        conn.commit()
+        print("Tabla ahorros eliminada correctamente.")
+    except Exception as e:
+        print(f"Error eliminando la tabla: {e}")
     finally:
         cursor.close()
         conn.close()
