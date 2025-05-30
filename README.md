@@ -49,6 +49,13 @@ import sys sys.path.append("src")
 
 BASES DE DATOS
 
+Para hacer uso de la interfaz y que funcione la integración con la base de datos, se debe hacer lo siguiente:
+
+1. Tener un base datos en blanco
+2. Crear un archivo en la carpeta config que se llame "secret_config.py"
+3. En ese archivo digitar sus credenciales de bases de datos
+4. Correr la IU con el comando ya suministrado, osea este python3 -m src.view.kivy_ahorro_programado
+
 Prerrequisitos
 Tener Python 3.8+ instalado.
 
