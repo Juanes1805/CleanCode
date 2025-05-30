@@ -20,16 +20,18 @@ class Saving:
     def calculate_programmed_savings(self,):
 
         minimum = 0
-        maximus = 1
+        maximus = 100
+        
 
         if self.interest <= minimum or self.interest > maximus:
             raise Invalidinterest( "ERROR: La tasa de interes es invalida" )
     
-        if self.period > maximus or self.period < minimum:
+        if self.period < minimum:
             raise Invalidmonths( "ERROR: El periodo es invalido" )
 
         constant = 1
-        return self.amount * (constant + self.interest ) * self.period - constant / self.interest
+        interest = self.interest/100
+        return self.amount * (constant + interest ) * self.period - constant / interest
     
     def do_tuple(self,):
         return (self.amount, self.interest, self.period)

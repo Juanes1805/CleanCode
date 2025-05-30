@@ -12,7 +12,7 @@ class Programmed_savings_test(unittest.TestCase):
 
     def test_normal_1(self):
         amount = 300000
-        interest = 0.035
+        interest = 3.5
         period = 24
 
         s = app.Saving(amount, interest, period)
@@ -22,7 +22,7 @@ class Programmed_savings_test(unittest.TestCase):
     
     def test_normal_2(self):
         amount = 500000
-        interest = 0.06
+        interest = 6
         period = 36
 
         s = app.Saving(amount, interest, period)
@@ -32,7 +32,7 @@ class Programmed_savings_test(unittest.TestCase):
     
     def test_normal_3(self):
         amount = 1000000
-        interest = 0.1
+        interest = 10
         period = 60
 
         s = app.Saving(amount, interest, period)
@@ -42,7 +42,7 @@ class Programmed_savings_test(unittest.TestCase):
     
     def test_normal_4(self):
         amount = 250000
-        interest = 0.05
+        interest = 5
         period = 1
 
         s = app.Saving(amount, interest, period)
@@ -52,7 +52,7 @@ class Programmed_savings_test(unittest.TestCase):
     
     def test_normal_5(self):
         amount = 200000
-        interest = 0.045
+        interest = 4.5
         period = 12
 
         s = app.Saving(amount, interest, period)
@@ -62,7 +62,7 @@ class Programmed_savings_test(unittest.TestCase):
     
     def test_extraordinary_1(self):
         amount = 1000000
-        interest = 0.02
+        interest = 2
         period = 1
 
         s = app.Saving(amount, interest, period)
@@ -72,7 +72,7 @@ class Programmed_savings_test(unittest.TestCase):
     
     def test_extraordinary_2(self):
         amount = 200000
-        interest = 0.05
+        interest = 5
         period = 99
 
         s = app.Saving(amount, interest, period)
@@ -82,7 +82,7 @@ class Programmed_savings_test(unittest.TestCase):
     
     def test_extraordinary_3(self):
         amount = 500000
-        interest = 1
+        interest = 100
         period = 12
 
         s = app.Saving(amount, interest, period)
@@ -92,7 +92,7 @@ class Programmed_savings_test(unittest.TestCase):
     
     def test_error_1(self):
         amount = 300000
-        interest = -0.05
+        interest = -5
         period = 12
 
         with self.assertRaises( app.Invalidinterest ):
@@ -101,7 +101,7 @@ class Programmed_savings_test(unittest.TestCase):
     
     def test_error_2(self):
         amount = 500000
-        interest = 0.06
+        interest = 6
         period = -12
 
         with self.assertRaises( app.Invalidmonths ):
@@ -119,7 +119,7 @@ class Programmed_savings_test(unittest.TestCase):
     
     def test_error_4(self):
         amount = 400000
-        interest = 1.5
+        interest = 150
         period = 12
 
         with self.assertRaises( app.Invalidinterest ):
